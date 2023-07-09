@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>Add new TODO item</h1>
+
+<div mat-dialog-content>
+  <form [formGroup]="toDoForm">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput type="text" formControlName="title" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+      <mat-select (selectionChange)="statusSelectionChange($event.value)" [(value)]="selectedToDoStatus">
+        <mat-option *ngFor="let status of toDoStatuses" [value]="status.value">
+          {{ status.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" (click)="addNewEditToDoItem()">
+    Add
+  </button>
+</div>

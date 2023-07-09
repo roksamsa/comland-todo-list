@@ -1,0 +1,38 @@
+:host {
+  overflow: hidden;
+}
+
+.todo-list__table {
+  display: flex;
+  flex-direction: column;
+  table-layout: fixed;
+  height: 100%;
+  box-shadow: 0 3px 15px 0 rgba(0, 19, 168, 0.17);
+  border-radius: 5px;
+  overflow: hidden;
+  border-collapse: collapse;
+
+  .mat-column-position {
+    width: 80px;
+  }
+
+  .mat-column-title {
+    width: 30%;
+  }
+
+  .mat-column-status {
+    width: 130px;
+  }
+
+  .mat-column-actions {
+    width: 150px;
+  }
+
+  tr.mat-row {
+    transition: background-color 150ms ease-in-out;
+
+    &:hover {
+      background-color: #f3f3f3;
+    }
+  }
+}

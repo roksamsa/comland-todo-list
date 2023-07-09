@@ -1,0 +1,32 @@
+@import '~bootstrap/scss/bootstrap';
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+@import 'style/global-variables.scss';
+@import 'style/global-mixins.scss';
+
+html,
+body {
+  height: 100%;
+  background-color: #edf1f8;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+  @include text-truncate;
+}
+
+table tbody {
+  display: block;
+  flex-grow: 1;
+  overflow: auto;
+}
+
+table thead, table tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
