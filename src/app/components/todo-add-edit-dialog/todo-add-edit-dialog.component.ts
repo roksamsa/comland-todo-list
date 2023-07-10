@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ToDoItemStatus } from 'src/app/enums/todo-item-statuses.enum';
-import { ToDoItem } from 'src/app/interfaces/todo-item.intereface';
+import { ToDoItem } from 'src/app/interfaces/todo-item.interface';
 import { TodoService } from "src/app/services/todo.service";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -50,7 +50,7 @@ export class TodoAddEditDialogComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.dialogData?.id) {
-      this._selectedToDoItem = this.todoService.getAllToDos().find(toDoItem => toDoItem.id === this.dialogData.id) as ToDoItem;
+      this._selectedToDoItem = this.todoService.getAllToDosFromStorage().find(toDoItem => toDoItem.id === this.dialogData.id) as ToDoItem;
 
       this.toDoForm.controls['title'].setValue(this._selectedToDoItem?.title as string);
       this.toDoForm.controls['description'].setValue(this._selectedToDoItem?.description as string);

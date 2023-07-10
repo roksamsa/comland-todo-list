@@ -8,6 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSortModule } from "@angular/material/sort";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,7 +24,7 @@ import { TodoAddNewComponent } from './components/pages/todo-add-new/todo-add-ne
 import { TodoService } from "./services/todo.service";
 import { TodoHeaderComponent } from './components/todo-header/todo-header.component';
 import { TodoEditComponent } from "./components/pages/todo-edit/todo-edit.component";
-import { MatSortModule } from "@angular/material/sort";
+import { TodoConfirmationDialogComponent } from './components/todo-confirmation-dialog/todo-confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { MatSortModule } from "@angular/material/sort";
     TodoAddNewComponent,
     TodoEditComponent,
     TodoHeaderComponent,
+    TodoConfirmationDialogComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -48,6 +51,7 @@ import { MatSortModule } from "@angular/material/sort";
     MatSelectModule,
     MatSortModule,
     MatIconModule,
+    MatSnackBarModule,
     NgbModule,
     RouterModule.forRoot([
     {

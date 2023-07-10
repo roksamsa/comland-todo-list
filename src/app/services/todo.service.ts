@@ -1,71 +1,73 @@
-import { BehaviorSubject } from "rxjs";
-import { ToDoItem } from "../interfaces/todo-item.intereface";
-import { ToDoItemStatus } from "../enums/todo-item-statuses.enum";
+import { BehaviorSubject, Subject } from 'rxjs';
+import { ToDoItem } from '../interfaces/todo-item.interface';
+import { ToDoItemStatus } from '../enums/todo-item-statuses.enum';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export class TodoService {
-  private toDoListData: ToDoItem[] = [];
+  private _toDoListData: ToDoItem[] = [];
 
-  private isToDoDataUpdatedSubject$$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public isToDoDataUpdated = this.isToDoDataUpdatedSubject$$.asObservable();
+  private _searchFilterSubject$$: BehaviorSubject<string> = new BehaviorSubject(
+    ''
+  );
+  public searchFilter$ = this._searchFilterSubject$$.asObservable();
 
-  private searchFilterSubject$$: BehaviorSubject<string> = new BehaviorSubject("");
-  public searchFilter = this.searchFilterSubject$$.asObservable();
+  private _toDoListDataSubject$$: Subject<ToDoItem[]> = new Subject();
+  public toDoListData$ = this._toDoListDataSubject$$.asObservable();
 
-  constructor() { }
+  public updateSearchWord(value: string) {
+    this._searchFilterSubject$$.next(value);
+  }
 
-  public getAllToDos(): ToDoItem[] {
+  public setLocalStorage(toDoListData: ToDoItem[]) {
+    this._toDoListData = toDoListData;
+
+    localStorage.setItem('toDoListData', JSON.stringify(this._toDoListData));
+    this._toDoListDataSubject$$.next(this._toDoListData);
+  }
+
+  public getAllToDosFromStorage(): ToDoItem[] {
     const savedTasks = localStorage.getItem('toDoListData');
+
     if (savedTasks) {
-      return JSON.parse(savedTasks);
+      this._toDoListData = JSON.parse(savedTasks);
+      this.setLocalStorage(this._toDoListData);
+      return this._toDoListData;
     }
 
     return [];
   }
 
   public deleteAllToDos() {
-    localStorage.setItem('toDoListData', JSON.stringify([]));
-    this.updateToDoData(true);
+    localStorage.clear();
+    this.setLocalStorage([]);
   }
 
   public addNewToDoItem(todoItem: ToDoItem) {
-    this.toDoListData = this.getAllToDos();
-    this.toDoListData.push({
+    this._toDoListData.push({
       ...todoItem,
-      position: this.toDoListData.length + 1
+      position: this._toDoListData.length + 1,
     });
-    localStorage.setItem('toDoListData', JSON.stringify(this.toDoListData));
+    this.setLocalStorage(this._toDoListData);
   }
 
   public markToDoAsDone(toDoItemIndex: number) {
-    this.toDoListData = this.getAllToDos();
-    this.toDoListData[toDoItemIndex].status = ToDoItemStatus.Done;
-    localStorage.setItem('toDoListData', JSON.stringify(this.toDoListData));
-    this.updateToDoData(true);
+    this._toDoListData[toDoItemIndex].status = ToDoItemStatus.Done;
+    this.setLocalStorage(this._toDoListData);
   }
 
   public editToDoItem(toDoItemIndex: number, toDoItem: ToDoItem) {
-    this.toDoListData = this.getAllToDos();
-    this.toDoListData[toDoItemIndex] = toDoItem;
-    localStorage.setItem('toDoListData', JSON.stringify(this.toDoListData));
-    this.updateToDoData(true);
+    this._toDoListData[toDoItemIndex] = toDoItem;
+    this.setLocalStorage(this._toDoListData);
   }
 
   public deleteToDo(toDoItemIndex: number) {
-    this.toDoListData = this.getAllToDos();
-
     if (toDoItemIndex > -1) {
-      this.toDoListData.splice(toDoItemIndex, 1);
-      this.toDoListData.slice(toDoItemIndex).forEach((item, index) => item.position = toDoItemIndex + index + 1);
+      this._toDoListData.splice(toDoItemIndex, 1);
+      this._toDoListData
+        .slice(toDoItemIndex)
+        .forEach((item, index) => (item.position = toDoItemIndex + index + 1));
     }
-    localStorage.setItem('toDoListData', JSON.stringify(this.toDoListData));
-    this.updateToDoData(true);
-  }
 
-  updateToDoData(value: boolean) {
-     this.isToDoDataUpdatedSubject$$.next(value);
-  }
-
-  updateSearchWord(value: string) {
-     this.searchFilterSubject$$.next(value);
+    this.setLocalStorage(this._toDoListData);
   }
 }
